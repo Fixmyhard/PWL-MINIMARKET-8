@@ -9,15 +9,18 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        if (Auth::user()->hasRole('Owner')) {
-            return view('dashboardOwner'); // Dashboard untuk Owner
-        } elseif (Auth::user()->hasAnyRole(['Manager', 'Supervisor', 'Kasir', 'Gudang'])) {
-            $branches = Auth::user()->cabang; // Ambil cabang pengguna
-            return view('dashboardBranch', compact('branches')); // Dashboard untuk cabang terkait
+        $user = Auth::user();
+
+        if ($user->hasRole('owner')) {
+            return view('dashboard.owner.dashboard'); // View untuk Owner
+        } elseif ($user->hasAnyRole(['manager', 'supervisor', 'kasir', 'gudang'])) {
+            $branches = $user->cabang; // Ambil cabang pengguna
+            return view('dashboard.branch.dashboard', compact('branches')); // View untuk cabang terkait
         }
 
-        return redirect('/'); // Jika tidak memiliki akses, redirect ke halaman utama
+        return redirect('/')->with('error', 'Access Denied'); // Redirect jika tidak memiliki akses
     }
+
 
     public function show($branch)
     {

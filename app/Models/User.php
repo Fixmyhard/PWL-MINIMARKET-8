@@ -45,4 +45,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function cabang()
+    {
+        return $this->hasMany(Branch::class, 'id_cabang');
+    }
+
 }

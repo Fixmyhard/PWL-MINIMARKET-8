@@ -21,12 +21,10 @@ class UserSeeder extends Seeder
         $faker = Faker::create('id_ID');
         $roles = ['owner', 'manager', 'supervisor', 'kasir', 'gudang'];
 
-        // Pastikan bahwa Role sudah ada
         foreach ($roles as $role) {
             Role::firstOrCreate(['name' => $role]);
         }
 
-        // Membuat pengguna Owner
         $owner = UpdateUser::create([
             'nama_user' => $faker->name,
             'peran' => 'owner',
@@ -38,8 +36,8 @@ class UserSeeder extends Seeder
         $owner->assignRole('owner');
 
         $roles = ['manager', 'supervisor', 'kasir', 'gudang'];
-        // Membuat pengguna untuk tiap cabang
-        $branches = Branch::all(); // Ambil semua cabang
+        
+        $branches = Branch::all();
         foreach ($branches as $branch) {
             foreach ($roles as $role) {
                 $user = UpdateUser::create([
@@ -49,7 +47,7 @@ class UserSeeder extends Seeder
                     'password' => Hash::make('password'),
                     'id_cabang' => $branch->id,
                 ]);
-                $user->assignRole($role); // Menggunakan peran yang telah ada
+                $user->assignRole($role); 
             }
         }
     } 

@@ -15,8 +15,11 @@ class DatabaseSeeder extends Seeder
             BranchSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
+            ProductSeeder::class,
             StockSeeder::class,
             TransactionSeeder::class,
+            TransactionDetailSeeder::class,
+            StockMovementSeeder::class,
         ]);
     }
 }

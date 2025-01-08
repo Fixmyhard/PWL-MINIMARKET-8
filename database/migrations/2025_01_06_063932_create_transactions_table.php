@@ -13,14 +13,12 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_cabang');
-            $table->unsignedBigInteger('id_kasir');
-            $table->decimal('total_harga', 10, 2);
-            $table->integer('total_produk');
-            $table->date('tanggal_transaksi');
+            $table->unsignedBigInteger('branch_id');
+            $table->date('transaction_date');
+            $table->decimal('total_amount', 10, 2);
+            $table->timestamps();
 
-            $table->foreign('id_cabang')->references('id')->on('branches')->onDelete('cascade');
-            $table->foreign('id_kasir')->references('id')->on('update_users')->onDelete('cascade');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
         });
     }
 

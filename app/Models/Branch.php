@@ -20,6 +20,16 @@ class Branch extends Model
 
     public function users()
     {
-        return $this->hasMany(UpdateUser::class, 'id_cabang');
+        return $this->hasMany(User::class, 'branch_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class, 'branch_id');
     }
 }

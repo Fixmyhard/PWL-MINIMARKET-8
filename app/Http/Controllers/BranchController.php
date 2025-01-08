@@ -4,10 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Branch;
+use App\Models\Transaction;
+use App\Models\Stock;
+use App\Models\Product;
+use App\Models\Receipt;
+use App\Models\StockMovement; // Add this line
 use Illuminate\Support\Facades\Log;
+use Illuminate\Routing\Controller as BaseController;
 
-class BranchController extends Controller
+class BranchController extends BaseController
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     // Redirect to dashboard
     public function redirectDashboard()
     {
@@ -31,24 +42,60 @@ class BranchController extends Controller
     // Dashboard for owner
     public function dashboardOwner(Request $request)
     {
-        $branches = Branch::all(); // Ambil semua cabang untuk pilihan
+        $this->authorizeRole(['owner']);
+        $branches = Branch::all();
         $selectedBranchId = $request->input('branch');
-        $selectedBranch = $selectedBranchId ? Branch::find($selectedBranchId) : null;
-    
-        return view('owner.dashboard', [
-            'title' => 'Owner Dashboard',
-            'branches' => $branches,
-            'selectedBranch' => $selectedBranch,
-        ]);
+    $selectedBranch = $selectedBranchId ? Branch::find($selectedBranchId) : null;
+
+    $transactions = $selectedBranch
+        ? $selectedBranch->transactions()->get()
+        : Transaction::all();
+
+    $stocks = $selectedBranch
+        ? $selectedBranch->stocks()->get()
+        : Stock::all();
+
+    return view('owner.dashboard', [
+        'title' => 'Owner Dashboard',
+        'branches' => $branches,
+        'selectedBranch' => $selectedBranch,
+        'transactions' => $transactions,
+        'stocks' => $stocks,
+    ]);
     }
-    
-    // Dashboard for specific roles
-    public function dashboardRole(Request $request)
+
+    // Dashboard for manager
+    public function dashboardManager()
     {
-        $userRole = auth()->user()->role; // Ambil role pengguna
-        $viewPath = strtolower($userRole) . '.dashboard';
-        return view($viewPath, ['role' => $userRole]);
-        return view('dashboard.role', ['role' => $userRole]);
+        $this->authorizeRole(['manager']);
+        return view('manager.dashboard', ['role' => 'manager']);
+    }
+
+    // Dashboard for supervisor
+    public function dashboardSupervisor()
+    {
+        $this->authorizeRole(['supervisor']);
+        return view('supervisor.dashboard', ['role' => 'supervisor']);
+    }
+
+    // Dashboard for kasir
+    public function dashboardKasir()
+    {
+        $this->authorizeRole(['kasir']);
+        $products = Product::all();
+        $dailySales = Transaction::whereDate('transaction_date', now()->toDateString())->get();
+        $receipts = Receipt::all();
+
+        return view('kasir.dashboard', compact('products', 'dailySales', 'receipts'));
+    }
+
+    // Dashboard for gudang
+    public function dashboardGudang()
+    {
+        $this->authorizeRole(['gudang']);
+        $stockMovements = StockMovement::all();
+
+        return view('gudang.dashboard', compact('stockMovements'));
     }
 
     // Show the form for creating a new branch
@@ -98,5 +145,14 @@ class BranchController extends Controller
         $branch->delete();
 
         return redirect()->route('dashboard')->with('success', 'Branch deleted successfully.');
+    }
+
+    // Authorize role
+    private function authorizeRole(array $roles)
+    {
+        $userRole = auth()->user()->role;
+        if (!in_array($userRole, $roles)) {
+            abort(403, 'Unauthorized action.');
+        }
     }
 }

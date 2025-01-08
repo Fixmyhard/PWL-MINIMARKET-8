@@ -31,4 +31,9 @@ class UpdateUser extends Authenticatable
     {
         return $this->belongsTo(Branch::class, 'id_cabang');
     }
+
+    public function getRoleAttribute()
+    {
+        return $this->attributes['peran'];
+    }
 }

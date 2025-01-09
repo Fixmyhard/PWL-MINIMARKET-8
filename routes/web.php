@@ -14,7 +14,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/dashboard', function () {
+// Route::get('/dashboard', function  () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/branch/{id}/edit', [BranchController::class, 'edit'])->name('branch.edit');
     Route::put('/branch/{id}', [BranchController::class, 'update'])->name('branch.update');
     Route::delete('/branch/{id}', [BranchController::class, 'destroy'])->name('branch.destroy');
-    Route::get('/owner/dashboard', [OwnerController::class, 'dashboard'])->name('owner.dashboard');
+    // Route::get('/owner/dashboard', [OwnerController::class, 'dashboard'])->name('owner.dashboard');
     Route::post('/owner/select-branch', [OwnerController::class, 'selectBranch'])->name('owner.selectBranch');
     Route::get('/owner/create-user', [OwnerController::class, 'createUser'])->name('owner.createUser');
     Route::post('/owner/store-user', [OwnerController::class, 'storeUser'])->name('owner.storeUser');

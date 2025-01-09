@@ -21,6 +21,7 @@ class StockMovementSeeder extends Seeder
                 'id_cabang' => $faker->randomElement($branchIds),
                 'id_produk' => $faker->randomElement($productIds),
                 'user_id' => $faker->randomElement($userIds),
+                'movement_type' => $faker->randomElement(['in', 'out']),
                 'jumlah' => $faker->numberBetween(1, 100),
                 'deskripsi' => $faker->sentence(),
                 'tanggal_perubahan' => $faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),

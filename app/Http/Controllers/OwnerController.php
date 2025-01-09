@@ -9,6 +9,15 @@ use App\Models\User;
 
 class OwnerController extends Controller
 {
+
+    public function index()
+    {
+        $branches = Branch::all();
+        $transactions = Transaction::all();
+        $stocks = Stock::all();
+        return view('owner.dashboard', compact('branches', 'transactions', 'stocks'));
+    }
+
     public function dashboard()
     {
         $branches = Branch::all();

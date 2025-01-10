@@ -11,14 +11,14 @@
                 <div class="form-group">
                     <label for="start_date">Start Date:</label>
                     <input type="date" name="start_date" id="start_date" class="form-control"
-                           value="{{ $startDate ?? request('start_date') }}">
+                           value="{{ $startDate }}">
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="end_date">End Date:</label>
                     <input type="date" name="end_date" id="end_date" class="form-control"
-                           value="{{ $endDate ?? request('end_date') }}">
+                           value="{{ $endDate }}">
                 </div>
             </div>
             <div class="col-md-4">
@@ -30,68 +30,76 @@
         </div>
     </form>
 
+    <!-- Transactions Summary Card -->
     <div class="row">
-        <!-- Transactions Card -->
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card mb-4">
                 <div class="card-header">
-                    <h2>Transactions</h2>
+                    <h2>Transaction Summary</h2>
                 </div>
                 <div class="card-body">
-                    @if(isset($transactions) && $transactions->isNotEmpty())
+                    @if($transactionsSummary->isNotEmpty())
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Product Name</th>
-                                    <th>Quantity</th>
-                                    <th>Unit Price</th>
-                                    <th>Subtotal</th>
                                     <th>Date</th>
+                                    <th>Number of Transactions</th>
+                                    <th>Total Sales</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($transactions as $transaction)
+                                @foreach ($transactionsSummary as $summary)
                                     <tr>
-                                        <td>{{ $transaction->id }}</td>
-                                        <td>{{ $transaction->product_name }}</td>
-                                        <td>{{ $transaction->quantity }}</td>
-                                        <td>{{ $transaction->unit_price }}</td>
-                                        <td>{{ $transaction->subtotal }}</td>
-                                        <td>{{ $transaction->date }}</td>
+                                        <td>{{ $summary->date }}</td>
+                                        <td>{{ $summary->count }}</td>
+                                        <td>Rp{{ number_format($summary->total, 2, ',', '.') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     @else
-                        <p>No transactions available.</p>
+                        <p>No transactions summary available.</p>
                     @endif
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Stocks Card -->
-        <div class="col-md-6">
+    <!-- Transactions Details Card -->
+    <div class="row">
+        <div class="col-md-12">
             <div class="card mb-4">
                 <div class="card-header">
-                    <h2>Stock Status</h2>
+                    <h2>Transaction Details</h2>
                 </div>
                 <div class="card-body">
-                    @if(isset($stocks) && $stocks->isNotEmpty())
-                        <ul class="list-group">
-                            @foreach($stocks as $stock)
-                                <li class="list-group-item">
-                                    <strong>Product:</strong> {{ $stock->nama_produk }}<br>
-                                    <strong>Quantity:</strong> {{ $stock->current_stock }}<br>
-                                    <strong>Updated At:</strong> {{ $stock->last_update }}<br>
-                                    @if($stock->current_stock <= 10)
-                                        <span class="text-danger">Low Stock Warning!</span>
-                                    @endif
-                                </li>
-                            @endforeach
-                        </ul>
+                    @if($transactions->isNotEmpty())
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($transactions as $transaction)
+                                    <tr>
+                                        <td>{{ $transaction->transaction_id }}</td>
+                                        <td>{{ $transaction->date }}</td>
+                                        <td>{{ $transaction->product_name }}</td>
+                                        <td>{{ $transaction->quantity }}</td>
+                                        <td>Rp{{ number_format($transaction->unit_price, 2, ',', '.') }}</td>
+                                        <td>Rp{{ number_format($transaction->subtotal, 2, ',', '.') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     @else
-                        <p>No stocks available.</p>
+                        <p>No transaction details available.</p>
                     @endif
                 </div>
             </div>

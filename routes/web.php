@@ -4,12 +4,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OwnerController;
-use App\Http\Controllers\OwnerDashboardController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\SupervisorController;
 
 
 Route::get('/', function () {
@@ -49,16 +49,18 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/owner/select-branch', [OwnerController::class, 'selectBranch'])->name('owner.selectBranch');
     Route::get('/owner/create-user', [OwnerController::class, 'createUser'])->name('owner.createUser');
     Route::post('/owner/store-user', [OwnerController::class, 'storeUser'])->name('owner.storeUser');
-    Route::get('/manager/dashboard/print', [ManagerDashboardController::class, 'print'])->name('manager.dashboard.print');
+    Route::get('/manager/dashboard/print', [ManagerController::class, 'print'])->name('manager.dashboard.print');
     Route::post('/transactions/store', [TransactionController::class, 'store'])->name('transactions.store');
     Route::get('/kasir/dashboard', [KasirController::class, 'dashboard'])->name('kasir.dashboard');
     Route::get('/manager/dashboard', [ManagerController::class, 'dashboard'])->name('manager.dashboard');
     Route::get('/manager/print-report', [ManagerController::class, 'printReport'])->name('print.report.manager');
+    Route::get('/dashboard/supervisor', [SupervisorController::class, 'index'])->name('dashboard.supervisor');
+    Route::get('/dashboard/manager', [ManagerController::class, 'index'])->name('dashboard.manager');
 });
 
-Route::middleware(['auth', 'owner'])->group(function () {
-    Route::get('/owner/dashboard', [OwnerDashboardController::class, 'index']);
-});
+// Route::middleware(['auth', 'owner'])->group(function () {
+//     Route::get('/owner/dashboard', [OwnerController::class, 'index']);
+// });
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')

@@ -75,37 +75,6 @@
         @endif
     </div>
 
-    <div class="section">
-        <h2>Current Stock Status</h2>
-        @if(isset($stocks) && $stocks->isNotEmpty())
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Current Stock</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($stocks as $stock)
-                        <tr>
-                            <td>{{ $stock->nama_produk }}</td>
-                            <td>{{ $stock->quantity }}</td>
-                            <td>
-                                @if($stock->quantity <= 10)
-                                    <span style="color: red;">Low Stock</span>
-                                @else
-                                    Normal
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        @else
-            <p>No stock data available.</p>
-        @endif
-    </div>
 
     <button class="no-print" onclick="window.print()">Print Report</button>
 </body>

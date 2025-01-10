@@ -25,6 +25,8 @@ class StockMovementSeeder extends Seeder
                 'jumlah' => $faker->numberBetween(1, 100),
                 'deskripsi' => $faker->sentence(),
                 'tanggal_perubahan' => $faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
     }

@@ -16,10 +16,11 @@ return new class extends Migration
             $table->unsignedBigInteger('id_cabang');
             $table->unsignedBigInteger('id_produk');
             $table->unsignedBigInteger('user_id');
-            $table->enum('movement_type', ['in', 'out']);
+            $table->enum('movement_type', ['in', 'out'])->default('in'); // Add default value for movement_type
             $table->integer('jumlah');
             $table->text('deskripsi')->nullable();
             $table->date('tanggal_perubahan');
+            $table->timestamps(); // Add timestamps columns
 
             $table->foreign('id_cabang')->references('id')->on('branches')->onDelete('cascade');
             $table->foreign('id_produk')->references('id')->on('products')->onDelete('cascade');

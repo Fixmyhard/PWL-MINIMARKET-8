@@ -9,6 +9,7 @@ use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\KasirController;
+use App\Http\Controllers\ManagerController;
 
 
 Route::get('/', function () {
@@ -51,6 +52,8 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/manager/dashboard/print', [ManagerDashboardController::class, 'print'])->name('manager.dashboard.print');
     Route::post('/transactions/store', [TransactionController::class, 'store'])->name('transactions.store');
     Route::get('/kasir/dashboard', [KasirController::class, 'dashboard'])->name('kasir.dashboard');
+    Route::get('/manager/dashboard', [ManagerController::class, 'dashboard'])->name('manager.dashboard');
+    Route::get('/manager/print-report', [ManagerController::class, 'printReport'])->name('print.report.manager');
 });
 
 Route::middleware(['auth', 'owner'])->group(function () {

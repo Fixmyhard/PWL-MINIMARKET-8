@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -47,14 +45,20 @@ class User extends Authenticatable
         ];
     }
 
-    public function cabang()
+    /**
+     * Relasi dengan model Branch.
+     * Relasi belongsTo karena setiap user memiliki satu cabang.
+     */
+    public function branch()
     {
-        return $this->hasMany(Branch::class, 'id_cabang');
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
 
+    /**
+     * Method getRoleAttribute untuk mendapatkan role user.
+     */
     public function getRoleAttribute($value)
     {
         return $value;
     }
-
 }
